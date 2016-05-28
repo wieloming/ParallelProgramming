@@ -1,11 +1,10 @@
-package FirstWeek
+package FirstWeek.BlurFilter.main.scala
 
-import java.util.concurrent.{ForkJoinPool, ForkJoinTask, ForkJoinWorkerThread, RecursiveTask}
 
-import scala.language.implicitConversions
+import java.util.concurrent._
 import scala.util.DynamicVariable
 
-object Utils {
+package object common {
 
   val forkJoinPool = new ForkJoinPool
 
@@ -16,7 +15,7 @@ object Utils {
         taskB
       }
       val left = taskA
-      (left, right.join)
+      (left, right.join())
     }
   }
 
