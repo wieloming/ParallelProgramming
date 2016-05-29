@@ -18,17 +18,17 @@ object VerticalBoxBlurRunner {
     val height = 1080
     val src = new Img(width, height)
     val dst = new Img(width, height)
-    val seqtime = standardConfig measure {
+    val seqTime = standardConfig measure {
       VerticalBoxBlur.blur(src, dst, 0, width, radius)
     }
-    println(s"sequential blur time: $seqtime ms")
+    println(s"sequential blur time: $seqTime ms")
 
     val numTasks = 32
-    val partime = standardConfig measure {
+    val parTime = standardConfig measure {
       VerticalBoxBlur.parBlur(src, dst, numTasks, radius)
     }
-    println(s"fork/join blur time: $partime ms")
-    println(s"speedup: ${seqtime / partime}")
+    println(s"fork/join blur time: $parTime ms")
+    println(s"speedup: ${seqTime / parTime}")
   }
 
 }

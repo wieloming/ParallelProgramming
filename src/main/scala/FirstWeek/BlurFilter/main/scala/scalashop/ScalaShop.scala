@@ -13,14 +13,14 @@ object ScalaShop {
     setSize(1024, 600)
     setLayout(new BorderLayout)
 
-    val rightpanel = new JPanel
-    rightpanel.setBorder(BorderFactory.createEtchedBorder(border.EtchedBorder.LOWERED))
-    rightpanel.setLayout(new BorderLayout)
-    add(rightpanel, BorderLayout.EAST)
+    val rightPanel = new JPanel
+    rightPanel.setBorder(BorderFactory.createEtchedBorder(border.EtchedBorder.LOWERED))
+    rightPanel.setLayout(new BorderLayout)
+    add(rightPanel, BorderLayout.EAST)
 
     val controls = new JPanel
     controls.setLayout(new GridLayout(0, 2))
-    rightpanel.add(controls, BorderLayout.NORTH)
+    rightPanel.add(controls, BorderLayout.NORTH)
 
     val filterLabel = new JLabel("Filter")
     controls.add(filterLabel)
@@ -43,28 +43,24 @@ object ScalaShop {
     val tasksSpinner = new JSpinner(new SpinnerNumberModel(32, 1, 128, 1))
     controls.add(tasksSpinner)
 
-    val stepbutton = new JButton("Apply filter")
-    stepbutton.addActionListener(new ActionListener {
+    val stepButton = new JButton("Apply filter")
+    stepButton.addActionListener(new ActionListener {
       def actionPerformed(e: ActionEvent) {
-        val time = measure {
-          canvas.applyFilter(getFilterName, getNumTasks, getRadius)
-        }
+        val time = measure(canvas.applyFilter(getFilterName, getNumTasks, getRadius))
         updateInformationBox(time)
       }
     })
-    controls.add(stepbutton)
+    controls.add(stepButton)
 
     val clearButton = new JButton("Reload")
     clearButton.addActionListener(new ActionListener {
-      def actionPerformed(e: ActionEvent) {
-        canvas.reload()
-      }
+      def actionPerformed(e: ActionEvent) = canvas.reload()
     })
     controls.add(clearButton)
 
     val info = new JTextArea("   ")
     info.setBorder(BorderFactory.createLoweredBevelBorder)
-    rightpanel.add(info, BorderLayout.SOUTH)
+    rightPanel.add(info, BorderLayout.SOUTH)
 
     val mainMenuBar = new JMenuBar()
 
