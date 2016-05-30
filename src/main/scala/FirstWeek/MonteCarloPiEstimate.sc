@@ -1,5 +1,5 @@
 import scala.util.Random
-import FirstWeek.Utils._
+import Utils.{Utils, _}
 
 
 def mc(iter: Int): Int = {
@@ -8,7 +8,7 @@ def mc(iter: Int): Int = {
   var hits = 0
   for(i <- 0 until iter){
     val x = randomX.nextDouble()
-    val y = randomX.nextDouble()
+    val y = randomY.nextDouble()
     if(x*x + y*y < 1) hits += 1
   }
   hits

@@ -1,4 +1,4 @@
-package FirstWeek
+package Utils
 
 import java.util.concurrent.{ForkJoinPool, ForkJoinTask, ForkJoinWorkerThread, RecursiveTask}
 

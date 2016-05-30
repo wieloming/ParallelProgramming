@@ -1,4 +1,4 @@
-import FirstWeek.Utils._
+import Utils.{Utils, _}
 
 def power(x: Int, p: Double) =
   math.exp(p * math.log(math.abs(x))).toInt
