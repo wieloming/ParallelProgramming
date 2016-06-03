@@ -7,7 +7,6 @@ def mapASegSeq[A, B](inp: Array[A], left: Int, right: Int, f: A => B, out: Array
     i = i + 1
   }
 }
-
 def mapASegPar[A, B](inp: Array[A], left: Int, right: Int, f: A => B, out: Array[B]): Unit = {
   if (right - left < 2)
     mapASegSeq(inp, left, right, f, out)
