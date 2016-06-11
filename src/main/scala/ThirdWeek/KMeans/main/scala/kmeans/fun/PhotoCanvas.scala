@@ -74,9 +74,9 @@ class PhotoCanvas extends JComponent {
 
   def applyIndexedColors(colorCount: Int, initStrategy: InitialSelectionStrategy, convStrategy: ConvergenceStrategy): String = {
     val filter = new IndexedColorFilter(image, colorCount, initStrategy, convStrategy)
-    image = filter.getResult()
+    image = filter.getResult
     repaint()
-    filter.getStatus()
+    filter.getStatus
   }
 
   override def paintComponent(gcan: Graphics) = {

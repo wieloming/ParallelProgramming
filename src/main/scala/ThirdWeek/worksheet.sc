@@ -19,8 +19,8 @@ List(1, 2, 3)
 
 def largestPalindrome(xs: GenSeq[Int]): Int = {
   xs.aggregate(Int.MinValue)(
-    (largest, n) =>
-      if (n > largest && n.toString == n.toString.reverse) n
+    (largest, el) =>
+      if (el > largest && el.toString == el.toString.reverse) el
       else largest,
     math.max
   )
@@ -43,10 +43,10 @@ val violation = graph.find({ case (i, v) => v != (i + 2) % graph.size })
 trait Iterator[A] {
   def next(): A
   def hasNext: Boolean
-  def foldLeft[B](z: B)(f: (B, A) => B): B = {
-    var s = z
-    while (hasNext) s = f(s, next())
-    s
+  def foldLeft[B](acc: B)(f: (B, A) => B): B = {
+    var sum = acc
+    while (hasNext) sum = f(sum, next())
+    sum
   }
 }
 
@@ -54,11 +54,11 @@ trait Splitter[A] extends Iterator[A] {
   def threshold: Int
   def split: Seq[Splitter[A]]
   def remaining: Int
-  def fold(z: A)(f: (A, A) => A): A = {
-    if (remaining < threshold) foldLeft(z)(f)
+  def fold(acc: A)(f: (A, A) => A): A = {
+    if (remaining < threshold) foldLeft(acc)(f)
     else {
-      val children = for (child <- split) yield task { child.fold(z)(f) }
-      children.map(_.join()).foldLeft(z)(f)
+      val children = for (child <- split) yield task(child.fold(acc)(f))
+      children.map(_.join()).foldLeft(acc)(f)
     }
   }
 }

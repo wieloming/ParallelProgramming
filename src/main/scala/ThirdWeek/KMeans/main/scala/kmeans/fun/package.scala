@@ -20,9 +20,9 @@ package object fun {
   /** Used to create an RGBA value from separate components. */
   def rgba(r: Double, g: Double, b: Double, a: Double): RGBA = {
     (clamp((a * 256).toInt, 0, 255) << 24) |
-    (clamp((r * 256).toInt, 0, 255) << 16) |
-    (clamp((g * 256).toInt, 0, 255) <<  8) |
-    (clamp((b * 256).toInt, 0, 255) <<  0)
+      (clamp((r * 256).toInt, 0, 255) << 16) |
+      (clamp((g * 256).toInt, 0, 255) << 8) |
+      (clamp((b * 256).toInt, 0, 255) << 0)
   }
 
   /** Restricts the integer into the specified range. */

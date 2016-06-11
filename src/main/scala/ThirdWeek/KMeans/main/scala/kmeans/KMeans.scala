@@ -112,18 +112,18 @@ object KMeansRunner {
     val points = kMeans.generatePoints(k, numPoints)
     val means = kMeans.initializeMeans(k, points)
 
-    val seqtime = standardConfig measure {
+    val seqTime = standardConfig measure {
       kMeans.kMeans(points, means, eta)
     }
-    println(s"sequential time: $seqtime ms")
+    println(s"sequential time: $seqTime ms")
 
-    val partime = standardConfig measure {
+    val parTime = standardConfig measure {
       val parPoints = points.par
       val parMeans = means.par
       kMeans.kMeans(parPoints, parMeans, eta)
     }
-    println(s"parallel time: $partime ms")
-    println(s"speedup: ${seqtime / partime}")
+    println(s"parallel time: $parTime ms")
+    println(s"speedup: ${seqTime / parTime}")
   }
 
 }

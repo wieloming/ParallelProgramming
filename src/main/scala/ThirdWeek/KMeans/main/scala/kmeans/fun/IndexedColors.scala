@@ -1,13 +1,15 @@
 package ThirdWeek.KMeans.main.scala.kmeans.fun
 
+import ThirdWeek.KMeans.main.scala.kmeans.{KMeans, Point}
+
 import scala.collection.GenSeq
 
-abstract sealed trait InitialSelectionStrategy
+sealed trait InitialSelectionStrategy
 case object RandomSampling extends InitialSelectionStrategy
 case object UniformSampling extends InitialSelectionStrategy
 case object UniformChoice extends InitialSelectionStrategy
 
-abstract sealed trait ConvergenceStrategy
+sealed trait ConvergenceStrategy
 case class ConvergedWhenSNRAbove(x: Double) extends ConvergenceStrategy
 case class ConvergedAfterNSteps(n: Int) extends ConvergenceStrategy
 case class ConvergedAfterMeansAreStill(eta: Double) extends ConvergenceStrategy
@@ -28,8 +30,8 @@ class IndexedColorFilter(initialImage: Img,
   private val newMeans = kMeans(points, means, 0.01)
 
   /* And these are the results exposed */
-  def getStatus() = s"Converged after $steps steps."
-  def getResult() = indexedImage(initialImage, newMeans)
+  def getStatus = s"Converged after $steps steps."
+  def getResult = indexedImage(initialImage, newMeans)
 
   private def imageToPoints(img: Img): GenSeq[Point] =
     for (x <- 0 until img.width; y <- 0 until img.height) yield {
@@ -48,7 +50,6 @@ class IndexedColorFilter(initialImage: Img,
       pts += point
       dst(x, y) = rgba(point.x, point.y, point.z, 1d)
     }
-
     dst
   }
 
@@ -63,11 +64,11 @@ class IndexedColorFilter(initialImage: Img,
           (for (r <- 0 until 255 by sep; g <- 0 until 255 by sep; b <- 0 until 255 by sep) yield {
             def inside(p: Point): Boolean =
               (p.x >= (r.toDouble / 255)) &&
-              (p.x <= ((r.toDouble + sep) / 255)) &&
-              (p.y >= (g.toDouble / 255)) &&
-              (p.y <= ((g.toDouble + sep) / 255)) &&
-              (p.z >= (b.toDouble / 255)) &&
-              (p.z <= ((b.toDouble + sep) / 255))
+                (p.x <= ((r.toDouble + sep) / 255)) &&
+                (p.y >= (g.toDouble / 255)) &&
+                (p.y <= ((g.toDouble + sep) / 255)) &&
+                (p.z >= (b.toDouble / 255)) &&
+                (p.z <= ((b.toDouble + sep) / 255))
 
             val pts = points.filter(inside(_))
             val cnt = pts.size * 3 * numColors / points.size
@@ -79,8 +80,11 @@ class IndexedColorFilter(initialImage: Img,
           }).flatten
         case UniformChoice =>
           val d: Int = math.max(1, (256 / math.cbrt(numColors.toDouble).ceil).toInt)
-          for (r <- 0 until 256 by d; g <- 0 until 256 by d; b <- 0 until 256 by d) yield
-            new Point(r.toDouble / 256,g.toDouble / 256, b.toDouble / 256)
+          for {
+            r <- 0 until 256 by d
+            g <- 0 until 256 by d
+            b <- 0 until 256 by d
+          } yield new Point(r.toDouble / 256, g.toDouble / 256, b.toDouble / 256)
       }
 
     val d2 = initialPoints.size.toDouble / numColors
@@ -97,7 +101,7 @@ class IndexedColorFilter(initialImage: Img,
       sound += sqrt(pow(point.x, 2) + pow(point.y, 2) + pow(point.z, 2))
       noise += sqrt(pow(point.x - closest.x, 2) + pow(point.y - closest.y, 2) + pow(point.z - closest.z, 2))
     }
-    sound/noise
+    sound / noise
   }
 
   override def converged(eta: Double)(oldMeans: GenSeq[Point], newMeans: GenSeq[Point]): Boolean = {
@@ -105,8 +109,8 @@ class IndexedColorFilter(initialImage: Img,
     convStrategy match {
       case ConvergedAfterNSteps(n) =>
         steps >= n
-      case ConvergedAfterMeansAreStill(eta) =>
-        super.converged(eta)(oldMeans, newMeans)
+      case ConvergedAfterMeansAreStill(newEta) =>
+        super.converged(newEta)(oldMeans, newMeans)
       case ConvergedWhenSNRAbove(snr_desired) =>
         val snr_computed = computeSNR(points, newMeans)
         snr_computed >= snr_desired
