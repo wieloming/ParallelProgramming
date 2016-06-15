@@ -44,7 +44,7 @@ object ScalaShop {
     initSelectionControls.add(initSelectionLabel)
 
     val uniformSamplingButton = new JRadioButton("Uniform Sampling")
-    uniformSamplingButton.setSelected(true);
+    uniformSamplingButton.setSelected(true)
     initSelectionControls.add(uniformSamplingButton)
 
     val randomSamplingButton = new JRadioButton("Random Sampling")
@@ -99,8 +99,8 @@ object ScalaShop {
     actionControls.setLayout(new GridLayout(0, 2))
     allControls.add(actionControls)
 
-    val stepbutton = new JButton("Apply filter")
-    stepbutton.addActionListener(new ActionListener {
+    val stepButton = new JButton("Apply filter")
+    stepButton.addActionListener(new ActionListener {
       def actionPerformed(e: ActionEvent) {
         var status = ""
         val time = measure {
@@ -109,7 +109,7 @@ object ScalaShop {
         updateInformationBox(status, time)
       }
     })
-    actionControls.add(stepbutton)
+    actionControls.add(stepButton)
 
     val clearButton = new JButton("Reload")
     clearButton.addActionListener(new ActionListener {
@@ -184,9 +184,9 @@ object ScalaShop {
       colorCountSpinner.getValue.asInstanceOf[Int]
 
     def getInitialSelectionStrategy: InitialSelectionStrategy =
-      if (randomSamplingButton.isSelected())
+      if (randomSamplingButton.isSelected)
         RandomSampling
-      else if (uniformSamplingButton.isSelected())
+      else if (uniformSamplingButton.isSelected)
         UniformSampling
       else
         UniformChoice

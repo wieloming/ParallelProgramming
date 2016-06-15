@@ -10,14 +10,14 @@ import scala.util.Random
 class KMeans {
 
   def generatePoints(k: Int, num: Int): Seq[Point] = {
-    val randx = new Random(1)
-    val randy = new Random(3)
-    val randz = new Random(5)
+    val randX = new Random(1)
+    val randY = new Random(3)
+    val randZ = new Random(5)
     (0 until num)
       .map({ i =>
-        val x = ((i + 1) % k) * 1.0 / k + randx.nextDouble() * 0.5
-        val y = ((i + 5) % k) * 1.0 / k + randy.nextDouble() * 0.5
-        val z = ((i + 7) % k) * 1.0 / k + randz.nextDouble() * 0.5
+        val x = ((i + 1) % k) * 1.0 / k + randX.nextDouble() * 0.5
+        val y = ((i + 5) % k) * 1.0 / k + randY.nextDouble() * 0.5
+        val z = ((i + 7) % k) * 1.0 / k + randZ.nextDouble() * 0.5
         new Point(x, y, z)
       }).to[mutable.ArrayBuffer]
   }
@@ -86,9 +86,7 @@ class KMeans {
   */
 class Point(val x: Double, val y: Double, val z: Double) {
   private def square(v: Double): Double = v * v
-  def squareDistance(that: Point): Double = {
-    square(that.x - x) + square(that.y - y) + square(that.z - z)
-  }
+  def squareDistance(that: Point): Double = square(that.x - x) + square(that.y - y) + square(that.z - z)
   private def round(v: Double): Double = (v * 100).toInt / 100.0
   override def toString = s"(${round(x)}, ${round(y)}, ${round(z)})"
 }

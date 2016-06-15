@@ -5,13 +5,19 @@ import ThirdWeek.KMeans.main.scala.kmeans.{KMeans, Point}
 import scala.collection.GenSeq
 
 sealed trait InitialSelectionStrategy
+
 case object RandomSampling extends InitialSelectionStrategy
+
 case object UniformSampling extends InitialSelectionStrategy
+
 case object UniformChoice extends InitialSelectionStrategy
 
 sealed trait ConvergenceStrategy
+
 case class ConvergedWhenSNRAbove(x: Double) extends ConvergenceStrategy
+
 case class ConvergedAfterNSteps(n: Int) extends ConvergenceStrategy
+
 case class ConvergedAfterMeansAreStill(eta: Double) extends ConvergenceStrategy
 
 
@@ -31,6 +37,7 @@ class IndexedColorFilter(initialImage: Img,
 
   /* And these are the results exposed */
   def getStatus = s"Converged after $steps steps."
+
   def getResult = indexedImage(initialImage, newMeans)
 
   private def imageToPoints(img: Img): GenSeq[Point] =
@@ -70,7 +77,7 @@ class IndexedColorFilter(initialImage: Img,
                 (p.z >= (b.toDouble / 255)) &&
                 (p.z <= ((b.toDouble + sep) / 255))
 
-            val pts = points.filter(inside(_))
+            val pts = points.filter(inside)
             val cnt = pts.size * 3 * numColors / points.size
             if (cnt >= 1) {
               val d = pts.size / cnt

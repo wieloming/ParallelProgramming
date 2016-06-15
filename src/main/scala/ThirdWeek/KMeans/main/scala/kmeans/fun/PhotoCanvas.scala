@@ -14,31 +14,20 @@ class PhotoCanvas extends JComponent {
   var image = loadEPFLImage()
 
   val timerDelay = 100
-  val timer =
-    new Timer(timerDelay, new ActionListener() {
-      def actionPerformed(e: ActionEvent): Unit = repaint()
-    })
+  val timer = new Timer(timerDelay, new ActionListener() { def actionPerformed(e: ActionEvent): Unit = repaint() })
 
-  override def getPreferredSize = {
-    new Dimension(image.width, image.height)
-  }
+  override def getPreferredSize = new Dimension(image.width, image.height)
 
   private def loadEPFLImage(): Img = {
     val stream = this.getClass.getResourceAsStream("/kmeans/epfl-view.jpg")
-    try {
-      loadImage(stream)
-    } finally {
-      stream.close()
-    }
+    try loadImage(stream)
+    finally stream.close()
   }
 
   private def loadFileImage(path: String): Img = {
     val stream = new FileInputStream(path)
-    try {
-      loadImage(stream)
-    } finally {
-      stream.close()
-    }
+    try loadImage(stream)
+    finally stream.close()
   }
 
   private def loadImage(inputStream: InputStream): Img = {

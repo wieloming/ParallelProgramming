@@ -40,9 +40,12 @@ for ((k, v) <- graph.par) graph(k) = previous(v)
 val violation = graph.find({ case (i, v) => v != (i + 2) % graph.size })
 
 ////////////////////////////////////////////////////
+
 trait Iterator[A] {
   def next(): A
+
   def hasNext: Boolean
+
   def foldLeft[B](acc: B)(f: (B, A) => B): B = {
     var sum = acc
     while (hasNext) sum = f(sum, next())
@@ -52,8 +55,11 @@ trait Iterator[A] {
 
 trait Splitter[A] extends Iterator[A] {
   def threshold: Int
+
   def split: Seq[Splitter[A]]
+
   def remaining: Int
+
   def fold(acc: A)(f: (A, A) => A): A = {
     if (remaining < threshold) foldLeft(acc)(f)
     else {
