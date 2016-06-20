@@ -101,7 +101,8 @@ object Conc {
     case Empty => ys
     case xs: Leaf[T] => new <>(xs, ys)
   }
-  @tailrec private def append[T](xs: Append[T], ys: Conc[T]): Conc[T] = {
+  @tailrec
+  private def append[T](xs: Append[T], ys: Conc[T]): Conc[T] = {
     if (xs.right.level > ys.level) new Append(xs, ys)
     else {
       val zs = new <>(xs.right, ys)

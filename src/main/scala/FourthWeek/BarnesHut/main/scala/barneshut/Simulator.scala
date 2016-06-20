@@ -32,7 +32,7 @@ class Simulator(val taskSupport: TaskSupport, val timeStats: TimeStatistics) {
     val parBodies = bodies.par
     parBodies.tasksupport = taskSupport
     return parBodies
-      .aggregate(new SectorMatrix(boundaries, SECTOR_PRECISION))((x, y) => x += y, _.combine(_))
+      .aggregate(new SectorMatrix(boundaries, SECTOR_PRECISION))(_ += _, _.combine(_))
   }
 
   def computeQuad(sectorMatrix: SectorMatrix): Quad = timeStats.timed("quad") {
@@ -78,7 +78,7 @@ class Simulator(val taskSupport: TaskSupport, val timeStats: TimeStatistics) {
     // compute the set of outliers
     val parBorderSectors = borderSectors.par
     parBorderSectors.tasksupport = taskSupport
-    val outliers = parBorderSectors.map({ case (x, y) => outliersInSector(x, y) }).reduce(_ combine _).result
+    val outliers = parBorderSectors.map({ case (x, y) => outliersInSector(x, y) }).reduce(_ combine _).result()
 
     // filter the bodies that are outliers
     val parBodies = bodies.par
@@ -88,16 +88,12 @@ class Simulator(val taskSupport: TaskSupport, val timeStats: TimeStatistics) {
   def step(bodies: Seq[Body]): (Seq[Body], Quad) = {
     // 1. compute boundaries
     val boundaries = computeBoundaries(bodies)
-
     // 2. compute sector matrix
     val sectorMatrix = computeSectorMatrix(bodies, boundaries)
-
     // 3. compute quad tree
     val quad = computeQuad(sectorMatrix)
-
     // 4. eliminate outliers
     val filteredBodies = eliminateOutliers(bodies, sectorMatrix, quad)
-
     // 5. update body velocities and positions
     val newBodies = updateBodies(filteredBodies, quad)
 

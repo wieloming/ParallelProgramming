@@ -7,21 +7,14 @@ package object barneshut {
 
   class Boundaries {
     var minX = Float.MaxValue
-
     var minY = Float.MaxValue
-
     var maxX = Float.MinValue
-
     var maxY = Float.MinValue
 
     def width = maxX - minX
-
     def height = maxY - minY
-
     def size = math.max(width, height)
-
     def centerX = minX + width / 2
-
     def centerY = minY + height / 2
 
     override def toString = s"Boundaries($minX, $minY, $maxX, $maxY)"
@@ -47,10 +40,10 @@ package object barneshut {
   }
 
   case class Fork(nw: Quad, ne: Quad, sw: Quad, se: Quad) extends Quad {
-    val centerX: Float = (nw.centerX + ne.centerX) / 2
-    val centerY: Float = (nw.centerY + sw.centerY) / 2
-    val size: Float = Math.max(Math.max(nw.size * 2, ne.size * 2), Math.max(se.size * 2, sw.size * 2))
-    val mass: Float = nw.mass + ne.mass + sw.mass + se.mass
+    val centerX = (nw.centerX + ne.centerX) / 2
+    val centerY = (nw.centerY + sw.centerY) / 2
+    val size = Math.max(Math.max(nw.size * 2, ne.size * 2), Math.max(se.size * 2, sw.size * 2))
+    val mass = nw.mass + ne.mass + sw.mass + se.mass
 
     val massX = getMass(nw.mass * nw.massX + ne.mass * ne.massX + sw.mass * sw.massX + se.mass * se.massX, mass)
     val massY = getMass(nw.mass * nw.massY + ne.mass * ne.massY + sw.mass * sw.massY + se.mass * se.massY, mass)
@@ -75,7 +68,8 @@ package object barneshut {
     val mass = bodies.map(_.mass).sum
     val (massX, massY) = (
       bodies.map(el => el.mass * el.x).sum / mass,
-      bodies.map(el => el.mass * el.y).sum / mass)
+      bodies.map(el => el.mass * el.y).sum / mass
+      )
     val total: Int = bodies.length
     def insert(b: Body): Quad =
       if (size > minimumSize)
@@ -84,7 +78,8 @@ package object barneshut {
           Empty(centerX + qSize, centerY - qSize, size / 2.0f),
           Empty(centerX - qSize, centerY + qSize, size / 2.0f),
           Empty(centerX + qSize, centerY + qSize, size / 2.0f)))(_.insert(_))
-      else Leaf(centerX, centerY, size, b +: bodies)
+      else
+        Leaf(centerX, centerY, size, b +: bodies)
     private val qSize = size / 4.0f
   }
 
@@ -215,7 +210,7 @@ package object barneshut {
               quad(x + nspan, y, nspan, nAchievedParallelism),
               quad(x, y + nspan, nspan, nAchievedParallelism),
               quad(x + nspan, y + nspan, nspan, nAchievedParallelism)
-              )
+            )
           Fork(nw, ne, sw, se)
         }
       }

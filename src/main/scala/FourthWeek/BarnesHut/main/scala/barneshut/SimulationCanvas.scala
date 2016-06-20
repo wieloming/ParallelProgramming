@@ -19,7 +19,7 @@ class SimulationCanvas(val model: SimulationModel) extends JComponent {
 
     // clear canvas pixels
     for (x <- 0 until MAX_RES; y <- 0 until MAX_RES) pixels(y * width + x) = 0
-    
+
     // count number of bodies in each pixel
     for (b <- model.bodies) {
       val px = ((b.x - model.screen.minX) / model.screen.width * width).toInt
@@ -51,7 +51,6 @@ class SimulationCanvas(val model: SimulationModel) extends JComponent {
     if (model.shouldRenderQuad) {
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
       val green = new Color(0, 225, 80, 150)
-      val red = new Color(200, 0, 0, 150)
       g.setColor(green)
       def drawQuad(depth: Int, quad: Quad): Unit = {
         def drawRect(fx: Float, fy: Float, fsz: Float, q: Quad, fill: Boolean = false) {
@@ -76,12 +75,11 @@ class SimulationCanvas(val model: SimulationModel) extends JComponent {
             drawQuad(depth + 1, ne)
             drawQuad(depth + 1, sw)
             drawQuad(depth + 1, se)
-          case Empty(_, _, _) | Leaf(_, _, _, _) =>
-            // done
+          case Empty(_, _, _) | Leaf(_, _, _, _) => // done
         }
       }
       drawQuad(0, model.quad)
-      
+
     }
     gcan.drawImage(img, 0, 0, null)
   }

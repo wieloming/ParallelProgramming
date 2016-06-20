@@ -5,15 +5,10 @@ import scala.collection.parallel.{TaskSupport, defaultTaskSupport}
 class SimulationModel {
 
   var screen = new Boundaries
-
   var bodies: Seq[Body] = Nil
-
   var quad: Quad = Empty(screen.centerX, screen.centerY, Float.MaxValue)
-
   var shouldRenderQuad = false
-
   var timeStats = new TimeStatistics
-
   var taskSupport: TaskSupport = defaultTaskSupport
 
   def initialize(parallelismLevel: Int, pattern: String, totalBodies: Int) {
