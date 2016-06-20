@@ -44,6 +44,7 @@ package object barneshut {
     val centerY = (nw.centerY + sw.centerY) / 2
     val size = Math.max(Math.max(nw.size * 2, ne.size * 2), Math.max(se.size * 2, sw.size * 2))
     val mass = nw.mass + ne.mass + sw.mass + se.mass
+    val quads = List(nw, ne, sw, se)
 
     val massX = getMass(nw.mass * nw.massX + ne.mass * ne.massX + sw.mass * sw.massX + se.mass * se.massX, mass)
     val massY = getMass(nw.mass * nw.massY + ne.mass * ne.massY + sw.mass * sw.massY + se.mass * se.massY, mass)
@@ -71,6 +72,7 @@ package object barneshut {
       bodies.map(el => el.mass * el.y).sum / mass
       )
     val total: Int = bodies.length
+
     def insert(b: Body): Quad =
       if (size > minimumSize)
         (b +: bodies).foldLeft(Fork(
@@ -80,6 +82,7 @@ package object barneshut {
           Empty(centerX + qSize, centerY + qSize, size / 2.0f)))(_.insert(_))
       else
         Leaf(centerX, centerY, size, b +: bodies)
+
     private val qSize = size / 4.0f
   }
 
@@ -89,7 +92,6 @@ package object barneshut {
   def theta = 0.5f
   def eliminationThreshold = 0.5f
   def force(m1: Float, m2: Float, dist: Float): Float = gee * m1 * m2 / (dist * dist)
-
   def distance(x0: Float, y0: Float, x1: Float, y1: Float): Float = {
     math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)).toFloat
   }
@@ -123,22 +125,12 @@ package object barneshut {
       }
 
       def traverse(quad: Quad): Unit = (quad: Quad) match {
-        case Empty(_, _, _) => addForce(quad.mass, quad.massX, quad.massY)
-        case Leaf(_, _, _, bodies) =>
-          var i = 0
-          while (i < bodies.size) {
-            addForce(bodies(i).mass, bodies(i).x, bodies(i).y)
-            i = i + 1
-          }
-        case Fork(nw, ne, sw, se) =>
+        case Empty(_, _, _) => ()
+        case Leaf(_, _, _, bodies) => bodies.foreach(b => addForce(b.mass, b.x, b.y))
+        case fork@Fork(nw, ne, sw, se) =>
           if (quad.size / distance(quad.massX, quad.massY, x, y) < theta)
             addForce(quad.mass, quad.massX, quad.massY)
-          else {
-            traverse(nw)
-            traverse(ne)
-            traverse(sw)
-            traverse(se)
-          }
+          else fork.quads.foreach(traverse)
       }
 
       traverse(quad)
@@ -210,7 +202,7 @@ package object barneshut {
               quad(x + nspan, y, nspan, nAchievedParallelism),
               quad(x, y + nspan, nspan, nAchievedParallelism),
               quad(x + nspan, y + nspan, nspan, nAchievedParallelism)
-            )
+              )
           Fork(nw, ne, sw, se)
         }
       }
@@ -249,4 +241,5 @@ package object barneshut {
       } mkString "\n"
     }
   }
+
 }
