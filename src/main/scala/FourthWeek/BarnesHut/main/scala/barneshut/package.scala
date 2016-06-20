@@ -164,7 +164,7 @@ package object barneshut {
       var x = b.x
       var y = b.y
 
-      if (x < boundaries.minX) x = boundaries.maxX
+      if (x < boundaries.minX) x = boundaries.minX
       else if (x > boundaries.maxX) x = boundaries.maxX
 
       if (y < boundaries.minY) y = boundaries.minY
