@@ -31,8 +31,7 @@ class Simulator(val taskSupport: TaskSupport, val timeStats: TimeStatistics) {
   def computeSectorMatrix(bodies: Seq[Body], boundaries: Boundaries): SectorMatrix = timeStats.timed("matrix") {
     val parBodies = bodies.par
     parBodies.tasksupport = taskSupport
-    return parBodies
-      .aggregate(new SectorMatrix(boundaries, SECTOR_PRECISION))(_ += _, _.combine(_))
+    return parBodies.aggregate(new SectorMatrix(boundaries, SECTOR_PRECISION))(_ += _, _.combine(_))
   }
 
   def computeQuad(sectorMatrix: SectorMatrix): Quad = timeStats.timed("quad") {
@@ -78,7 +77,9 @@ class Simulator(val taskSupport: TaskSupport, val timeStats: TimeStatistics) {
     // compute the set of outliers
     val parBorderSectors = borderSectors.par
     parBorderSectors.tasksupport = taskSupport
-    val outliers = parBorderSectors.map({ case (x, y) => outliersInSector(x, y) }).reduce(_ combine _).result()
+    val outliers = parBorderSectors
+      .map({ case (x, y) => outliersInSector(x, y) })
+      .reduce(_ combine _).result()
 
     // filter the bodies that are outliers
     val parBodies = bodies.par

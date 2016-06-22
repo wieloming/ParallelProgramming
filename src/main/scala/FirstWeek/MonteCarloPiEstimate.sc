@@ -1,5 +1,5 @@
 import scala.util.Random
-import Utils.{Utils, _}
+import Utils.Utils._
 
 
 def mc(iter: Int): Int = {
